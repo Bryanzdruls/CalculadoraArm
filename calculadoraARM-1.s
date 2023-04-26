@@ -1,8 +1,9 @@
 @ falta validacion de signos 
 	.data
 n1:	.word 0x00000012
-n2:	.word 0xfffffff9
+n2:	.word 0x00000000
 aux: 	.word 0x00000000
+error0: .ascii "error div no se puede por 0\n"
 	.text
 main:	ldr r0, =n1
 	ldr r1, =n2
@@ -28,7 +29,8 @@ seguir:	cmp r0 ,r6	@Se verifica si el r0 es negativo
 	cmp r1 ,r6 	@Se verifica si el r1 es negativo
 	bmi neg1
 
-
+	sub r2, r1, #0
+	beq printS
 	bl div
 
 	ldr r7,=aux	@se almacena en r7 la direccion de aux
@@ -111,3 +113,9 @@ cambio1:
 	neg r4, r4	@se niega el resultado en caso que sea negativo
 	mov r1, r5	@se pone el registro en el valor original
 	b comp
+
+printS: mov r0, #1
+	mov r1, #1
+	 ldr r2, = error0
+	bl printf
+	b stop
